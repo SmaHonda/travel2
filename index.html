@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的旅遊記錄</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <!-- Travel List Section -->
+  <h1>次の旅先</h1>
+  <p>2025.Feb 日本。長野/東京</p>
+  <h1>これまでの旅路</h1>
+  <div id="travel-container">
+    <!-- 左右箭頭 -->
+    <button id="prev" class="scroll-btn">&#8592;</button>
+    <div id="travel-list">
+      <!-- 卡片將由 JavaScript 動態生成 -->
+    </div>
+    <button id="next" class="scroll-btn">&#8594;</button>
+  </div>
+<h1>訪れた国々</h1>
+<div id="bar-chart-container" class="chart-container">
+  <!-- 長條圖的數據將透過 JavaScript 生成 -->
+</div>
+<div id="total-visits">
+  <p>Total Visits: <span id="total-visits-count">0</span></p>
+</div>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Script -->
+  <script src="assets/js/common.js"></script>
+  <script>
+// 使用 fetch 來載入 JSON 檔案
+fetch('assets/data/travelData.json')
+  .then(response => response.json())
+  .then(travelData => {
+    const travelList = document.getElementById('travel-list');
+
+    travelData.forEach(travel => {
+      const card = document.createElement('a'); // 將卡片本身變為 <a>
+      card.classList.add('travel-card');
+      card.href = travel.link; // 將連結設為 JSON 提供的網址
+      card.target = '_blank'; // 新開分頁打開頁面（可選）
+      card.rel = 'noopener noreferrer'; // 提升安全性
+
+      card.innerHTML = `
+        <img src="${travel.image}" alt="${travel.country}">
+        <h3>${travel.country}</h3>
+        <p>Visited in ${travel.year}</p>
+      `;
+      
+      travelList.appendChild(card);
+    });
+  })
+  .catch(error => console.error('Error loading the travel data:', error));
+
+// 左右滾動按鈕
+document.getElementById('prev').addEventListener('click', () => {
+  const travelList = document.getElementById('travel-list');
+  travelList.scrollBy({ left: -200, behavior: 'smooth' });
+});
+
+document.getElementById('next').addEventListener('click', () => {
+  const travelList = document.getElementById('travel-list');
+  travelList.scrollBy({ left: 200, behavior: 'smooth' });
+});
+
+
+// 從 JSON 生成長條圖並計算加總
+fetch('assets/data/travelTimes.json')
+  .then(response => response.json())
+  .then(travelData => {
+    const chartContainer = document.getElementById('bar-chart-container');
+    const totalVisitsCount = document.getElementById('total-visits-count');
+    let totalVisits = 0; // 初始化總數
+
+    travelData.forEach(data => {
+      const bar = document.createElement('div');
+      bar.classList.add('bar');
+
+      bar.innerHTML = `
+        <div class="bar-label">${data.country}</div>
+        <div class="bar-visual" data-visits="${data.visits}" style="width: 0;">
+          <span>${data.visits}</span>
+        </div>
+      `;
+
+      chartContainer.appendChild(bar);
+
+      // 累加所有國家的旅行次數
+      totalVisits += data.visits;
+    });
+
+    // 計算加總數字動畫
+    function animateNumber(targetNumber) {
+      let currentNumber = 1;  // 開始數字從 1 開始
+      const increment = targetNumber / 100; // 每次增加的數字
+      const speed = 50; // 每次更新的時間 (毫秒)
+      
+      const interval = setInterval(() => {
+        currentNumber += increment;
+        if (currentNumber >= targetNumber) {
+          currentNumber = targetNumber;
+          clearInterval(interval); // 停止動畫
+        }
+        totalVisitsCount.textContent = Math.round(currentNumber); // 更新顯示的數字
+      }, speed);
+    }
+
+    // 監測滾動事件
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // 當 #bar-chart-container 進入視窗時，開始動畫
+          animateNumber(totalVisits);
+
+          // 觸發長條圖的動畫
+          const bars = document.querySelectorAll('.bar-visual');
+          bars.forEach(bar => {
+            const visits = bar.getAttribute('data-visits');
+            bar.style.width = `${visits * 10}px`; // 長度按比例調整
+          });
+        }
+      });
+    });
+
+    // 開始觀察 #bar-chart-container
+    observer.observe(chartContainer);
+  })
+  .catch(error => console.error('Error loading travel data:', error));
+
+
+
+  </script>
+</body>
+</html>

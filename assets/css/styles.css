@@ -1,0 +1,252 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background-color: #333;
+  color: white;
+}
+
+.menu {
+  position: relative;
+}
+
+#menu-toggle {
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* 更新選單樣式 */
+#menu-items {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  z-index: 9999;
+}
+#menu-items.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#menu-items ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: center; /* 文字置中 */
+}
+
+#menu-items li {
+  padding: 15px 0;
+}
+
+#menu-items a {
+  color: white;
+  font-size: 24px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+#menu-items a:hover {
+  color: #f0f0f0;
+}
+
+/* 關閉按鈕樣式 */
+#close-menu {
+  position: absolute;
+  bottom: 10%;
+  right: 50%;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  z-index: 9999;  /* 確保關閉按鈕在最上層 */
+}
+
+
+/* 中間 Logo */
+.logo {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+}
+
+
+
+
+footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 1em 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+#travel-container {
+  position: relative;
+}
+
+#travel-list {
+  display: flex; /* 設定為水平排列 */
+  gap: 1em; /* 卡片間距 */
+  overflow-x: auto; /* 啟用水平滾動 */
+  scroll-snap-type: x mandatory; /* 卡片對齊效果 */
+  padding: 1em; /* 內距 */
+  -webkit-overflow-scrolling: touch; /* 使得手機端的滾動更加流暢 */
+}
+
+.travel-card {
+  flex: 0 0 auto; /* 防止卡片縮放 */
+  width: 200px; /* 固定寬度 */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 1em;
+  scroll-snap-align: start; /* 每張卡片對齊開始位置 */
+  text-decoration: none; /* 移除底線 */
+  color: inherit; /* 繼承父元素的文字顏色 */
+}
+
+/* 鼠標懸停時，保留正常樣式 */
+.travel-card:hover {
+  text-decoration: none; /* 確保 hover 時也沒有底線 */
+  color: inherit;
+}
+
+.travel-card img {
+  width: 120px; /* 固定寬度，讓圖片變成正方形 */
+  height: 120px; /* 固定高度，與寬度相同 */
+  border-radius: 50%; /* 裁切成圓形 */
+  object-fit: cover; /* 確保圖片裁切模式 */
+  display: block; /* 確保不出現下方的額外間距 */
+  margin: 0 auto; /* 讓圖片置中 */
+  transition: transform 1s ease; /* 設置動畫過渡 */
+  transform: rotateY(0); /* 預設圖片不旋轉 */
+}
+
+.travel-card:hover img {
+  transform: rotateY(360deg); /* hover 時旋轉 360 度 */
+}
+
+
+
+.travel-card h3 {
+  margin: 0.5em 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.travel-card p {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+#prev {
+  left: 10px;
+}
+
+#next {
+  right: 10px;
+}
+
+.chart-container {
+  width: 100%;
+  margin-top: 50px;
+  padding: 20px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bar-label {
+  width: 100px;
+  text-align: right;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.bar-visual {
+  position: relative;
+  height: 20px;
+  background-color: #666666;
+  transition: width 1s ease; /* 動畫效果 */
+  width: 0; /* 預設寬度為 0，等滑到時觸發動畫 */
+}
+
+.bar-visual span {
+  position: absolute;
+  right: -30px;
+  top: 0;
+  font-size: 12px;
+  color: #333;
+}
+#total-visits {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
+#total-visits-count {
+  display: inline-block;
+  font-size: 36px;
+  color: #3498db;
+  transition: all 0.3s ease-in-out;
+}
+
